@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      # Required for npm provenance — lets the job mint an OIDC token.
+      # Required for npm trusted publishing — lets the job mint an OIDC token.
       id-token: write
     steps:
       - uses: actions/checkout@v5
@@ -20,6 +20,9 @@ jobs:
           node-version: '22'
           cache: npm
           registry-url: 'https://registry.npmjs.org'
+
+      # Trusted publishing needs npm >= 11.5.1; Node 22 still bundles npm 10.
+      - run: npm install -g npm@latest
 
       - run: npm ci
       - run: npm run typecheck
@@ -37,7 +40,6 @@ jobs:
             exit 1
           fi
 
-      # prepublishOnly runs the build; provenance comes from publishConfig.
+      # No NPM_TOKEN: auth comes from OIDC via trusted publishing, which also
+      # generates provenance automatically. prepack runs the build.
       - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
