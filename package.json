@@ -1,0 +1,50 @@
+{
+  "name": "open-messaging",
+  "version": "0.1.0",
+  "description": "Open messaging provider port for transactional notify (email-first, multi-ESP ready)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "email",
+    "messaging",
+    "resend",
+    "provider",
+    "hexagonal",
+    "transactional"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asakaxgit/open-messaging.git"
+  },
+  "bugs": {
+    "url": "https://github.com/asakaxgit/open-messaging/issues"
+  },
+  "homepage": "https://github.com/asakaxgit/open-messaging#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "@types/node": "^22.13.10"
+  }
+}
