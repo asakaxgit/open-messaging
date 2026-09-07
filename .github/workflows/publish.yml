@@ -1,0 +1,43 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for npm provenance — lets the job mint an OIDC token.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+      # Fail early if the tag and package.json version disagree, rather than
+      # publishing a version nobody expected.
+      - name: Check tag matches package version
+        if: github.event_name == 'release'
+        run: |
+          pkg="$(node -p 'require("./package.json").version')"
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$pkg" != "$tag" ]; then
+            echo "package.json is $pkg but the release tag is $tag" >&2
+            exit 1
+          fi
+
+      # prepublishOnly runs the build; provenance comes from publishConfig.
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
