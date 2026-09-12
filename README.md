@@ -47,3 +47,18 @@ Additional ESPs (Postmark, SES, SendGrid, …) can register on the same port lat
 ## License
 
 MIT
+
+## Testing / mocks
+
+```ts
+import { createMockMessagingProvider, fixtureSendInput } from 'open-messaging/testing';
+import { setMessagingProviderOverride, getMessagingProvider } from 'open-messaging';
+
+const mock = createMockMessagingProvider({ id: 'resend' });
+setMessagingProviderOverride(mock);
+await getMessagingProvider().send(fixtureSendInput);
+expect(mock.calls.send).toHaveLength(1);
+```
+
+With `RESEND_API_KEY` unset, the Resend adapter mock-sends. With the key set, unit tests can stub `fetch`.
+
