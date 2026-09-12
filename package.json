@@ -1,6 +1,6 @@
 {
   "name": "open-messaging",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Open messaging provider port for transactional notify (email-first, multi-ESP ready)",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,6 +9,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js"
     }
   },
   "files": [
